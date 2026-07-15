@@ -47,6 +47,15 @@ function init() {
       }
       return null;
     },
+    deleteWarrior: (id) => {
+      const index = db.warriors.findIndex(w => w.warrior_id === id);
+      if (index !== -1) {
+        const deleted = db.warriors.splice(index, 1)[0];
+        saveDatabase();
+        return deleted;
+      }
+      return null;
+    },
     
     createMatch: (match) => {
       match.match_id = db.matches.length > 0 ? Math.max(...db.matches.map(m => m.match_id)) + 1 : 1;

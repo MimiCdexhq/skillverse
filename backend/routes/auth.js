@@ -14,7 +14,7 @@ router.post('/login', async (req, res) => {
 
     if (warrior) {
       const token = jwt.sign(
-        { warriorId: warrior.warrior_id, telegramId: warrior.telegram_id },
+        { warriorId: warrior.warrior_id, telegramId: warrior.telegram_id, is_admin: warrior.is_admin || false },
         process.env.JWT_SECRET,
         { expiresIn: '30d' }
       );
@@ -36,12 +36,13 @@ router.post('/login', async (req, res) => {
       games_played: 0,
       win_streak: 0,
       referral_code: `REF${String(telegramId).slice(-6)}`,
-      join_date: new Date().toISOString()
+      join_date: new Date().toISOString(),
+      is_admin: false
     };
 
     warrior = db.createWarrior(newWarrior);
     const token = jwt.sign(
-      { warriorId: warrior.warrior_id, telegramId: warrior.telegram_id },
+      { warriorId: warrior.warrior_id, telegramId: warrior.telegram_id, is_admin: warrior.is_admin || false },
       process.env.JWT_SECRET,
       { expiresIn: '30d' }
     );

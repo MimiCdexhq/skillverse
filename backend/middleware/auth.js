@@ -17,4 +17,11 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+const adminOnly = (req, res, next) => {
+  if (!req.warrior?.is_admin) {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+  next();
+};
+
+module.exports = { authMiddleware, adminOnly };
