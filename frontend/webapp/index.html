@@ -96,63 +96,204 @@
     <header class="dash-header glass-header">
       <div class="header-left">
         <span class="header-logo">⚔️</span>
-        <span class="header-title">SkillVerse</span>
+      </div>
+      <div class="header-center">
+        <span class="welcome-text">Welcome back,</span>
+        <span class="welcome-username" id="warriorName">Warrior</span>
       </div>
       <div class="header-right">
         <button class="icon-btn" id="notificationBtn">
           <span>🔔</span>
           <span class="notification-badge">3</span>
         </button>
+        <button class="icon-btn" id="settingsBtn">
+          <span>⚙️</span>
+        </button>
       </div>
     </header>
 
     <div class="dashboard-content">
+      <!-- Wallet Overview -->
       <section class="wallet-section">
-        <div class="wallet-card glass-card primary-glow">
-          <div class="wallet-header">
-            <span class="wallet-icon">🪙</span>
-            <span class="wallet-label">MIM Balance</span>
+        <div class="wallet-hero glass-card primary-glow">
+          <div class="wallet-hero-header">
+            <span class="wallet-hero-label">WALLET OVERVIEW</span>
           </div>
-          <div class="wallet-value" id="mimBalance">0</div>
-        </div>
-        <div class="wallet-card glass-card accent-glow">
-          <div class="wallet-header">
-            <span class="wallet-icon">💎</span>
-            <span class="wallet-label">vUSDT</span>
+          <div class="wallet-hero-grid">
+            <div class="wallet-hero-item">
+              <span class="wallet-hero-icon">💎</span>
+              <span class="wallet-hero-value" id="vusdtBalance">0</span>
+              <span class="wallet-hero-label">vUSDT</span>
+            </div>
+            <div class="wallet-hero-item">
+              <span class="wallet-hero-icon">🪙</span>
+              <span class="wallet-hero-value" id="mimBalance">0</span>
+              <span class="wallet-hero-label">MIM</span>
+            </div>
+            <div class="wallet-hero-item">
+              <span class="wallet-hero-icon">🏆</span>
+              <span class="wallet-hero-value" id="rankDisplay">#--</span>
+              <span class="wallet-hero-label">Rank</span>
+            </div>
+            <div class="wallet-hero-item">
+              <span class="wallet-hero-icon">📈</span>
+              <span class="wallet-hero-value" id="winRateDisplay">0%</span>
+              <span class="wallet-hero-label">Win Rate</span>
+            </div>
           </div>
-          <div class="wallet-value" id="vusdtBalance">0</div>
-        </div>
-        <div class="wallet-card glass-card info-glow">
-          <div class="wallet-header">
-            <span class="wallet-icon">⭐</span>
-            <span class="wallet-label">SkillScore</span>
+          <div class="wallet-actions">
+            <button class="wallet-btn primary">Deposit</button>
+            <button class="wallet-btn secondary">Withdraw</button>
+            <button class="wallet-btn tertiary">History</button>
           </div>
-          <div class="wallet-value" id="skillScore">0</div>
         </div>
       </section>
 
-      <button class="btn-play glow-btn" onclick="Router.show('play')">
-        <span class="btn-icon">⚔️</span>
-        <span class="btn-text">PLAY NOW</span>
-        <span class="btn-glow"></span>
-      </button>
+      <!-- Daily Rewards -->
+      <section class="daily-rewards-section">
+        <div class="rewards-card glass-card accent-glow">
+          <div class="rewards-header">
+            <span class="rewards-icon">🎁</span>
+            <span class="rewards-title">DAILY REWARDS</span>
+          </div>
+          <div class="rewards-content">
+            <div class="streak-info">
+              <span class="streak-label">Login Streak</span>
+              <span class="streak-value">7 Days</span>
+            </div>
+            <div class="countdown-info">
+              <span class="countdown-label">Next reward in</span>
+              <span class="countdown-value" id="countdownTimer">04:32:15</span>
+            </div>
+          </div>
+          <button class="btn-primary glow-btn" onclick="Game.claimDailyReward()">
+            <span class="btn-text">CLAIM REWARD</span>
+            <span class="btn-glow"></span>
+          </button>
+        </div>
+      </section>
 
-      <section class="menu-grid">
-        <div class="menu-card glass-card" onclick="Router.show('dailyReward')">
-          <div class="menu-icon">🎁</div>
-          <div class="menu-label">Daily Reward</div>
+      <!-- Quick Actions -->
+      <section class="quick-actions-section">
+        <h3 class="section-title">QUICK ACTIONS</h3>
+        <div class="quick-actions-grid">
+          <div class="quick-action-card glass-card" onclick="Router.show('play')">
+            <span class="qa-icon">⚔️</span>
+            <span class="qa-label">Play PvP</span>
+          </div>
+          <div class="quick-action-card glass-card" onclick="Router.show('play')">
+            <span class="qa-icon">🤖</span>
+            <span class="qa-label">Play AI</span>
+          </div>
+          <div class="quick-action-card glass-card" onclick="Router.show('leaderboard')">
+            <span class="qa-icon">🏆</span>
+            <span class="qa-label">Tournament</span>
+          </div>
+          <div class="quick-action-card glass-card" onclick="Router.show('leaderboard')">
+            <span class="qa-icon">📊</span>
+            <span class="qa-label">Leaderboard</span>
+          </div>
+          <div class="quick-action-card glass-card" onclick="Router.show('wallet')">
+            <span class="qa-icon">💰</span>
+            <span class="qa-label">Wallet</span>
+          </div>
+          <div class="quick-action-card glass-card" onclick="Router.show('profile')">
+            <span class="qa-icon">🎯</span>
+            <span class="qa-label">Missions</span>
+          </div>
+          <div class="quick-action-card glass-card" onclick="Router.show('profile')">
+            <span class="qa-icon">👥</span>
+            <span class="qa-label">Friends</span>
+          </div>
+          <div class="quick-action-card glass-card">
+            <span class="qa-icon">🛒</span>
+            <span class="qa-label">Marketplace</span>
+          </div>
         </div>
-        <div class="menu-card glass-card" onclick="Router.show('leaderboard')">
-          <div class="menu-icon">🏆</div>
-          <div class="menu-label">Leaderboard</div>
+      </section>
+
+      <!-- Statistics -->
+      <section class="stats-section">
+        <h3 class="section-title">STATISTICS</h3>
+        <div class="stats-grid">
+          <div class="stat-card glass-card">
+            <span class="stat-icon">🎮</span>
+            <span class="stat-value" id="gamesPlayed">0</span>
+            <span class="stat-label">Games Played</span>
+          </div>
+          <div class="stat-card glass-card">
+            <span class="stat-icon">🏅</span>
+            <span class="stat-value" id="totalWins">0</span>
+            <span class="stat-label">Wins</span>
+          </div>
+          <div class="stat-card glass-card">
+            <span class="stat-icon">📈</span>
+            <span class="stat-value" id="profileWinRate">0%</span>
+            <span class="stat-label">Win Rate</span>
+          </div>
+          <div class="stat-card glass-card">
+            <span class="stat-icon">🔥</span>
+            <span class="stat-value" id="currentStreak">0</span>
+            <span class="stat-label">Current Streak</span>
+          </div>
         </div>
-        <div class="menu-card glass-card" onclick="Router.show('wallet')">
-          <div class="menu-icon">💰</div>
-          <div class="menu-label">Wallet</div>
+      </section>
+
+      <!-- Featured Banner -->
+      <section class="featured-section">
+        <div class="featured-banner glass-card">
+          <div class="featured-glow"></div>
+          <div class="featured-content">
+            <span class="featured-badge">SEASON 1</span>
+            <h3 class="featured-title">FOUNDER REWARDS</h3>
+            <div class="prize-pool">
+              <span class="prize-label">Prize Pool</span>
+              <span class="prize-value">10,000 USDT</span>
+            </div>
+            <button class="btn-primary glow-btn" onclick="Router.show('leaderboard')">
+              <span class="btn-text">ENTER TOURNAMENT</span>
+              <span class="btn-glow"></span>
+            </button>
+          </div>
         </div>
-        <div class="menu-card glass-card" onclick="Router.show('profile')">
-          <div class="menu-icon">👤</div>
-          <div class="menu-label">Profile</div>
+      </section>
+
+      <!-- Activity Feed -->
+      <section class="activity-section">
+        <h3 class="section-title">ACTIVITY</h3>
+        <div class="activity-list">
+          <div class="activity-item glass-card">
+            <span class="activity-icon">⚔️</span>
+            <div class="activity-info">
+              <span class="activity-title">Recent Matches</span>
+              <span class="activity-desc">View your match history</span>
+            </div>
+            <span class="activity-arrow">→</span>
+          </div>
+          <div class="activity-item glass-card">
+            <span class="activity-icon">🎁</span>
+            <div class="activity-info">
+              <span class="activity-title">Rewards</span>
+              <span class="activity-desc">Claim pending rewards</span>
+            </div>
+            <span class="activity-arrow">→</span>
+          </div>
+          <div class="activity-item glass-card">
+            <span class="activity-icon">👥</span>
+            <div class="activity-info">
+              <span class="activity-title">Friends Online</span>
+              <span class="activity-desc">12 friends online</span>
+            </div>
+            <span class="activity-arrow">→</span>
+          </div>
+          <div class="activity-item glass-card">
+            <span class="activity-icon">🏆</span>
+            <div class="activity-info">
+              <span class="activity-title">Achievements</span>
+              <span class="activity-desc">3 new achievements</span>
+            </div>
+            <span class="activity-arrow">→</span>
+          </div>
         </div>
       </section>
     </div>
@@ -163,16 +304,16 @@
         <span class="nav-label">Home</span>
       </div>
       <div class="nav-item" onclick="Router.show('play')">
-        <span class="nav-icon">🎮</span>
-        <span class="nav-label">Play</span>
-      </div>
-      <div class="nav-item" onclick="Router.show('leaderboard')">
-        <span class="nav-icon">🏆</span>
-        <span class="nav-label">Rank</span>
+        <span class="nav-icon">⚔️</span>
+        <span class="nav-label">Battle</span>
       </div>
       <div class="nav-item" onclick="Router.show('wallet')">
         <span class="nav-icon">💰</span>
         <span class="nav-label">Wallet</span>
+      </div>
+      <div class="nav-item" onclick="Router.show('leaderboard')">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-label">Rank</span>
       </div>
       <div class="nav-item" onclick="Router.show('profile')">
         <span class="nav-icon">👤</span>

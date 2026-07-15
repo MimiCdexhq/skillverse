@@ -185,6 +185,44 @@ const AnimatedCounter = {
 };
 
 /* ===========================
+   COUNTDOWN TIMER
+   =========================== */
+const CountdownTimer = {
+  intervalId: null,
+
+  start(elementId, hours = 4, minutes = 32, seconds = 15) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+
+    let totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+    const update = () => {
+      totalSeconds--;
+
+      if (totalSeconds <= 0) {
+        totalSeconds = 24 * 3600;
+      }
+
+      const h = Math.floor(totalSeconds / 3600);
+      const m = Math.floor((totalSeconds % 3600) / 60);
+      const s = totalSeconds % 60;
+
+      element.textContent = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    };
+
+    update();
+    this.intervalId = setInterval(update, 1000);
+  },
+
+  stop() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+  },
+};
+
+/* ===========================
    COIN SPARKLE EFFECT
    =========================== */
 const SparkleEffect = {
@@ -411,14 +449,32 @@ const App = {
   updateDashboardUI() {
     if (!currentWarrior) return;
 
-    AnimatedCounter.animate(document.getElementById('mimBalance'), currentWarrior.mimBalance || 0, 800);
-    AnimatedCounter.animate(document.getElementById('vusdtBalance'), currentWarrior.vusdtBalance || 0, 800);
-    AnimatedCounter.animate(document.getElementById('skillScore'), currentWarrior.skillScore || 0, 800);
+    const mimEl = document.getElementById('mimBalance');
+    const vusdtEl = document.getElementById('vusdtBalance');
+    const skillScoreEl = document.getElementById('skillScore');
+    const warriorNameEl = document.getElementById('warriorName');
+    const rankEl = document.getElementById('rankDisplay');
+    const winRateEl = document.getElementById('winRateDisplay');
+    const gamesPlayedEl = document.getElementById('gamesPlayed');
+    const totalWinsEl = document.getElementById('totalWins');
+    const profileWinRateEl = document.getElementById('profileWinRate');
+    const currentStreakEl = document.getElementById('currentStreak');
 
-    const warriorName = document.getElementById('warriorName');
-    if (warriorName) {
-      warriorName.textContent = currentWarrior.displayName || 'Warrior';
+    if (mimEl) AnimatedCounter.animate(mimEl, currentWarrior.mimBalance || 0, 800);
+    if (vusdtEl) AnimatedCounter.animate(vusdtEl, currentWarrior.vusdtBalance || 0, 800);
+    if (skillScoreEl) AnimatedCounter.animate(skillScoreEl, currentWarrior.skillScore || 0, 800);
+
+    if (warriorNameEl) {
+      warriorNameEl.textContent = currentWarrior.displayName || 'Warrior';
     }
+
+    if (rankEl) rankEl.textContent = `#${currentWarrior.rank || '--'}`;
+    if (winRateEl) winRateEl.textContent = `${currentWarrior.winRate || 0}%`;
+
+    if (gamesPlayedEl) AnimatedCounter.animate(gamesPlayedEl, currentWarrior.gamesPlayed || 0, 600);
+    if (totalWinsEl) AnimatedCounter.animate(totalWinsEl, currentWarrior.totalWins || 0, 600);
+    if (profileWinRateEl) AnimatedCounter.animate(profileWinRateEl, currentWarrior.winRate || 0, 600, '', '%');
+    if (currentStreakEl) AnimatedCounter.animate(currentStreakEl, currentWarrior.winStreak || 0, 600);
   },
 
   logout() {
@@ -882,7 +938,10 @@ const Profile = {
    =========================== */
 document.addEventListener('DOMContentLoaded', () => {
   App.init();
-  Router.register('dashboard', 'dashboard', () => App.updateDashboardUI());
+  Router.register('dashboard', 'dashboard', () => {
+    App.updateDashboardUI();
+    CountdownTimer.start('countdownTimer', 4, 32, 15);
+  });
   Router.register('play', 'play', () => Game.reset());
   Router.register('leaderboard', 'leaderboard', () => Leaderboard.load('skillscore'));
   Router.register('wallet', 'wallet', () => Wallet.load());

@@ -1677,3 +1677,545 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 191, 255, 0.5);
 }
+
+/* ===========================
+   DASHBOARD HEADER
+   =========================== */
+.dash-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 12px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.welcome-text {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.welcome-username {
+  font-size: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #00bfff, #ff0044);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ===========================
+   DASHBOARD CONTENT
+   =========================== */
+.dashboard-content {
+  padding: 20px;
+  padding-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #00bfff;
+  margin-bottom: 15px;
+  text-shadow: 0 0 10px rgba(0, 191, 255, 0.4);
+}
+
+/* ===========================
+   WALLET OVERVIEW HERO
+   =========================== */
+.wallet-hero {
+  padding: 25px;
+}
+
+.wallet-hero-header {
+  margin-bottom: 20px;
+}
+
+.wallet-hero-label {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #888;
+}
+
+.wallet-hero-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.wallet-hero-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.wallet-hero-icon {
+  font-size: 24px;
+}
+
+.wallet-hero-value {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(0, 191, 255, 0.5);
+}
+
+.wallet-hero-label {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.wallet-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.wallet-btn {
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.wallet-btn.primary {
+  background: linear-gradient(135deg, #00bfff, #0099cc);
+  color: white;
+  box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
+}
+
+.wallet-btn.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.wallet-btn.tertiary {
+  background: rgba(255, 255, 255, 0.03);
+  color: #aaa;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.wallet-btn:hover {
+  transform: translateY(-2px);
+}
+
+.wallet-btn.primary:hover {
+  box-shadow: 0 0 25px rgba(0, 191, 255, 0.5);
+}
+
+/* ===========================
+   DAILY REWARDS
+   =========================== */
+.rewards-card {
+  padding: 25px;
+}
+
+.rewards-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.rewards-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+}
+
+.rewards-title {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.rewards-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.streak-info,
+.countdown-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.streak-label,
+.countdown-label {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.streak-value {
+  font-size: 18px;
+  font-weight: 900;
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.countdown-value {
+  font-size: 18px;
+  font-weight: 900;
+  color: #00bfff;
+  text-shadow: 0 0 10px rgba(0, 191, 255, 0.4);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===========================
+   QUICK ACTIONS
+   =========================== */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.quick-action-card {
+  padding: 20px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quick-action-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 191, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 191, 255, 0.15);
+}
+
+.qa-icon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 8px rgba(0, 191, 255, 0.4));
+}
+
+.qa-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ccc;
+  line-height: 1.3;
+}
+
+/* ===========================
+   STATISTICS
+   =========================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.stat-card {
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* ===========================
+   FEATURED BANNER
+   =========================== */
+.featured-banner {
+  padding: 30px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 191, 255, 0.15) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.featured-content {
+  position: relative;
+  z-index: 1;
+}
+
+.featured-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, rgba(0, 191, 255, 0.2), rgba(255, 0, 68, 0.2));
+  border: 1px solid rgba(0, 191, 255, 0.4);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #00bfff;
+  margin-bottom: 15px;
+}
+
+.featured-title {
+  font-size: 24px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 15px;
+  background: linear-gradient(135deg, #00bfff, #ff0044);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.prize-pool {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 25px;
+}
+
+.prize-label {
+  font-size: 12px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.prize-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+/* ===========================
+   ACTIVITY FEED
+   =========================== */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.activity-item:hover {
+  transform: translateX(4px);
+  border-color: rgba(0, 191, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 191, 255, 0.1);
+}
+
+.activity-icon {
+  font-size: 24px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.activity-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activity-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.activity-desc {
+  font-size: 12px;
+  color: #888;
+}
+
+.activity-arrow {
+  font-size: 18px;
+  color: #00bfff;
+  opacity: 0.6;
+}
+
+/* ===========================
+   BOTTOM NAVIGATION
+   =========================== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  background: rgba(5, 8, 22, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00bfff, #ff0044);
+  border-radius: 0 0 4px 4px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 191, 255, 0.6);
+}
+
+.nav-item.active::before {
+  width: 40px;
+}
+
+.nav-icon {
+  font-size: 22px;
+  transition: all 0.3s ease;
+  filter: grayscale(1) brightness(0.5);
+}
+
+.nav-item.active .nav-icon {
+  filter: grayscale(0) brightness(1) drop-shadow(0 0 10px rgba(0, 191, 255, 0.9));
+  animation: pulse 2s infinite;
+}
+
+.nav-label {
+  font-size: 10px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.nav-item.active .nav-label {
+  color: #00bfff;
+  text-shadow: 0 0 10px rgba(0, 191, 255, 0.8);
+}
+
+/* ===========================
+   DASHBOARD RESPONSIVE
+   =========================== */
+@media (min-width: 768px) {
+  .dashboard-content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .quick-actions-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .wallet-hero-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .wallet-actions {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .quick-actions-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .wallet-hero-grid {
+    gap: 10px;
+  }
+
+  .wallet-hero-value {
+    font-size: 18px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
