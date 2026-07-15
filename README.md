@@ -72,6 +72,33 @@ skillverse/
 - **Leaderboards** - Multiple ranking categories
 - **Warrior Profiles** - Detailed stats and history
 
+## 🚢 Deploy to Vercel (Free)
+
+1. Push this repo to GitHub
+2. Go to [vercel.com](https://vercel.com) and sign up with GitHub
+3. Click **"Import Project"** → select your `skillverse` repo
+4. Vercel auto-detects the config from `vercel.json`
+5. Add environment variable:
+   - `JWT_SECRET` = any long random string
+6. Click **Deploy**
+
+Your app will be live at `https://your-project.vercel.app`
+
+### Vercel Structure
+- Frontend: `frontend/webapp/` (static files)
+- Backend API: `backend/api/` (serverless functions)
+- Database: JSON file stored in `/tmp` (persists per serverless instance)
+
+### Local Development
+```bash
+# Install dependencies
+npm install
+cd backend && npm install
+
+# Start backend locally (if needed)
+cd backend && node -e "console.log('Backend API at http://localhost:5000/api')"
+```
+
 ## 🛠 Tech Stack
 
 ### Frontend

@@ -1,7 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
-const DB_PATH = path.join(__dirname, 'skillverse.json');
+const DB_PATH = process.env.VERCEL 
+  ? '/tmp/skillverse.json' 
+  : path.join(__dirname, 'skillverse.json');
 
 let db = null;
 
@@ -25,6 +27,101 @@ function saveDatabase() {
 
 function init() {
   loadDatabase();
+  
+  if (db.warriors.length === 0) {
+    db.warriors = [
+      {
+        warrior_id: 1,
+        telegram_id: 123456789,
+        username: "demo_warrior",
+        display_name: "Demo Warrior",
+        skill_score: 150,
+        mim_balance: 250,
+        vusdt_balance: 5,
+        level: 3,
+        rank: "Veteran",
+        total_wins: 15,
+        total_losses: 5,
+        total_draws: 2,
+        games_played: 22,
+        win_streak: 3,
+        referral_code: "REF001",
+        join_date: "2026-01-15T00:00:00.000Z",
+        is_admin: false
+      },
+      {
+        warrior_id: 2,
+        telegram_id: 987654321,
+        username: "test_player",
+        display_name: "Test Player",
+        skill_score: 80,
+        mim_balance: 120,
+        vusdt_balance: 2,
+        level: 2,
+        rank: "Warrior",
+        total_wins: 8,
+        total_losses: 7,
+        total_draws: 1,
+        games_played: 16,
+        win_streak: 1,
+        referral_code: "REF002",
+        join_date: "2026-02-20T00:00:00.000Z",
+        is_admin: false
+      },
+      {
+        warrior_id: 3,
+        telegram_id: 555555555,
+        username: "pro_gamer",
+        display_name: "Pro Gamer",
+        skill_score: 320,
+        mim_balance: 500,
+        vusdt_balance: 12,
+        level: 5,
+        rank: "Champion",
+        total_wins: 32,
+        total_losses: 8,
+        total_draws: 3,
+        games_played: 43,
+        win_streak: 8,
+        referral_code: "REF003",
+        join_date: "2026-01-01T00:00:00.000Z",
+        is_admin: true
+      }
+    ];
+    db.matches = [
+      {
+        match_id: 1,
+        player1_id: 1,
+        player2_id: 2,
+        winner: 1,
+        game_type: "rps",
+        stake: 500,
+        mode: "ranked",
+        status: "completed",
+        player1_choice: "rock",
+        player2_choice: "scissors",
+        created_at: "2026-07-14T10:00:00.000Z",
+        completed_at: "2026-07-14T10:05:00.000Z"
+      },
+      {
+        match_id: 2,
+        player1_id: 2,
+        player2_id: 3,
+        winner: 3,
+        game_type: "rps",
+        stake: 1000,
+        mode: "ranked",
+        status: "completed",
+        player1_choice: "paper",
+        player2_choice: "scissors",
+        created_at: "2026-07-14T11:00:00.000Z",
+        completed_at: "2026-07-14T11:03:00.000Z"
+      }
+    ];
+    db.referrals = [];
+    saveDatabase();
+  }
+  
   return {
     getWarriors: () => db.warriors,
     getMatches: () => db.matches,

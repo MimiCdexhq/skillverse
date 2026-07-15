@@ -1,12 +1,12 @@
-const express = require('express');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const db = require('../database');
 require('dotenv').config();
 
-const router = express.Router();
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-router.post('/login', async (req, res) => {
   try {
     const { telegramId, username, firstName, lastName } = req.body;
 
@@ -52,6 +52,4 @@ router.post('/login', async (req, res) => {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Server error during authentication' });
   }
-});
-
-module.exports = router;
+};

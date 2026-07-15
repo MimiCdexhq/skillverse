@@ -4,7 +4,7 @@
 
 const API_BASE = window.location.hostname === 'localhost' 
   ? 'http://localhost:5000' 
-  : '';
+  : '/api';
 
 let currentWarrior = null;
 let authToken = localStorage.getItem('skillverse_token');
@@ -89,7 +89,7 @@ async function handleTelegramLogin() {
   
   const user = tg.initDataUnsafe.user;
   try {
-    const response = await fetch(`${API_BASE}/auth/login`, {
+    const response = await fetch(`${API_BASE}/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -139,7 +139,7 @@ async function apiCall(endpoint, options = {}) {
 
 // Load Dashboard
 async function loadDashboard() {
-  const profile = await apiCall('/warrior/profile');
+  const profile = await apiCall('/warrior?action=profile');
   if (!profile) return;
   
   currentWarrior = profile;
@@ -179,7 +179,7 @@ document.getElementById('findMatchBtn')?.addEventListener('click', async () => {
   document.getElementById('loadingText').textContent = 'Finding match...';
   
   try {
-    const result = await apiCall('/match/create', {
+    const result = await apiCall('/match', {
       method: 'POST',
       body: JSON.stringify({
         stake: selectedStake,
@@ -331,14 +331,14 @@ function showResults(result, playerChoice, opponentChoice) {
     });
     
     if (result === 'win') {
-      apiCall('/reward', {
+      apiCall('/wallet?action=reward', {
         method: 'POST',
-        body: JSON.stringify({ type: 'skillscore', amount: 10 })
+        body: JSON.stringify({ type: 'skill_score', amount: 10 })
       });
     } else if (result === 'draw') {
-      apiCall('/reward', {
+      apiCall('/wallet?action=reward', {
         method: 'POST',
-        body: JSON.stringify({ type: 'skillscore', amount: 2 })
+        body: JSON.stringify({ type: 'skill_score', amount: 2 })
       });
     }
     
@@ -364,7 +364,7 @@ async function loadLeaderboard(type) {
   const list = document.getElementById('leaderboardList');
   list.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Loading...</p></div>';
   
-  const data = await apiCall(`/leaderboard/${type}`);
+  const data = await apiCall(`/leaderboard?action=${type}`);
   if (!data) return;
   
   list.innerHTML = '';
@@ -404,7 +404,7 @@ leaderboardObserver.observe(document.getElementById('leaderboard'), { attributes
 
 // Wallet Screen
 async function loadWallet() {
-  const wallet = await apiCall('/wallet');
+  const wallet = await apiCall('/wallet?action=wallet');
   if (!wallet) return;
   
   document.getElementById('walletMim').textContent = (wallet.mim_balance || 0).toLocaleString();
@@ -420,7 +420,7 @@ walletObserver.observe(document.getElementById('wallet'), { attributes: true, at
 
 // Profile Screen
 async function loadProfile() {
-  const profile = await apiCall('/warrior/profile');
+  const profile = await apiCall('/warrior?action=profile');
   if (!profile) return;
   
   document.getElementById('profileName').textContent = profile.display_name || 'Warrior';

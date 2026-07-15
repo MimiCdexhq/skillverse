@@ -1,0 +1,9 @@
+{
+  "name": "skillverse",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd backend && npm install && node -e \"console.log('Backend ready at http://localhost:5000')\"",
+    "install:backend": "cd backend && npm install"
+  }
+}
