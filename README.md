@@ -35,8 +35,8 @@ npm start
 
 ### Access the App
 
-- **Frontend:** Open `frontend/webapp/index.html` in a browser or serve via any static server
-- **Backend API:** http://localhost:5000
+- **Frontend:** Open `public/index.html` in a browser or serve via any static server
+- **Backend API:** http://localhost:5000/api
 - **Health Check:** http://localhost:5000/health
 
 ## 📁 Project Structure
@@ -44,21 +44,24 @@ npm start
 ```
 skillverse/
 ├── backend/
-│   ├── server.js           # Express server
+│   ├── api/                 # Vercel serverless functions
+│   │   ├── auth/           # Login endpoint
+│   │   ├── warrior/        # Profile/stats
+│   │   ├── match/          # Match create/result
+│   │   ├── leaderboard/    # Rankings
+│   │   └── wallet/         # Wallet/rewards
 │   ├── database.js         # JSON file-based database
-│   ├── middleware/         # Auth middleware
-│   ├── routes/            # API routes
-│   ├── package.json
-│   └── .env.example
-├── frontend/
-│   └── webapp/
-│       ├── index.html     # Main app
-│       ├── style.css      # Galaxy theme
-│       ├── script.js      # Game logic
-│       └── screens/       # Screen templates
+│   └── package.json
+├── public/                  # Vercel static frontend
+│   ├── index.html          # Main app
+│   ├── style.css           # Galaxy theme
+│   ├── script.js           # Game logic
+│   ├── assets/             # Images
+│   └── screens/            # Screen templates
 ├── database/
 │   └── skillverse.json    # Database file (warriors, matches)
 ├── docs/                  # Documentation
+├── vercel.json            # Vercel deployment config
 └── README.md
 ```
 
@@ -85,7 +88,7 @@ skillverse/
 Your app will be live at `https://your-project.vercel.app`
 
 ### Vercel Structure
-- Frontend: `frontend/webapp/` (static files)
+- Frontend: `public/` (static files)
 - Backend API: `backend/api/` (serverless functions)
 - Database: JSON file stored in `/tmp` (persists per serverless instance)
 
@@ -117,27 +120,29 @@ cd backend && node -e "console.log('Backend API at http://localhost:5000/api')"
 
 ## 📡 API Endpoints
 
+All endpoints are prefixed with `/api`.
+
 ### Authentication
-- `POST /auth/login` - Telegram login / registration
+- `POST /auth` - Telegram login / registration
 
 ### Warrior
-- `GET /warrior/profile` - Get warrior profile
-- `GET /warrior/stats` - Get warrior statistics
+- `GET /warrior?action=profile` - Get warrior profile
+- `GET /warrior?action=stats` - Get warrior statistics
 
 ### Match
-- `POST /match/create` - Create new match
+- `POST /match` - Create new match
 - `POST /match/result` - Submit match result
-- `GET /match/history` - Get match history
+- `GET /match` - Get match history
 
 ### Leaderboard
-- `GET /leaderboard/skillscore` - SkillScore rankings
-- `GET /leaderboard/mim` - MIM balance rankings
-- `GET /leaderboard/games` - Games played rankings
-- `GET /leaderboard/streak` - Win streak rankings
+- `GET /leaderboard?action=skillscore` - SkillScore rankings
+- `GET /leaderboard?action=mim` - MIM balance rankings
+- `GET /leaderboard?action=games` - Games played rankings
+- `GET /leaderboard?action=streak` - Win streak rankings
 
 ### Wallet
-- `GET /wallet` - Get MIM and vUSDT balances
-- `POST /wallet/reward` - Grant rewards
+- `GET /wallet?action=wallet` - Get MIM and vUSDT balances
+- `POST /wallet?action=reward` - Grant rewards
 
 ## 🎯 Game Rules (Rock Paper Scissors)
 
