@@ -1,48 +1,316 @@
 /* ===========================
-   SKILLVERSE V1 - MODULAR APP
+   SKILLVERSE V2 - FUTURISTIC UI
    =========================== */
 
 const API_BASE = '/api';
 let currentWarrior = null;
 let authToken = null;
 let currentMatch = null;
+let particleAnimationId = null;
 
-const App = {
+/* ===========================
+   PARTICLE BACKGROUND SYSTEM
+   =========================== */
+const ParticleSystem = {
+  canvas: null,
+  ctx: null,
+  particles: [],
+  nebulaClouds: [],
+  animationId: null,
+
   init() {
-    this.createStars();
-    this.bindEvents();
-    this.checkSession();
+    this.canvas = document.getElementById('particleCanvas');
+    if (!this.canvas) return;
+
+    this.ctx = this.canvas.getContext('2d');
+    this.resize();
+    this.createParticles();
+    this.createNebula();
+    this.animate();
+
+    window.addEventListener('resize', () => this.resize());
   },
 
-  createStars() {
-    const starsContainer = document.getElementById('stars');
-    if (!starsContainer) return;
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  },
 
-    for (let i = 0; i < 120; i++) {
-      const star = document.createElement('div');
-      star.style.cssText = `
-        position: absolute;
-        width: ${Math.random() * 3 + 1}px;
-        height: ${star.style.width};
-        background: white;
+  createParticles() {
+    const count = Math.min(150, Math.floor(window.innerWidth / 10));
+    this.particles = [];
+
+    for (let i = 0; i < count; i++) {
+      this.particles.push({
+        x: Math.random() * this.canvas.width,
+        y: Math.random() * this.canvas.height,
+        radius: Math.random() * 2 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.3,
+        speedY: (Math.random() - 0.5) * 0.3,
+        opacity: Math.random() * 0.8 + 0.2,
+        pulse: Math.random() * Math.PI * 2,
+        pulseSpeed: Math.random() * 0.02 + 0.005,
+        color: Math.random() > 0.5 ? '0, 191, 255' : '255, 0, 68',
+      });
+    }
+  },
+
+  createNebula() {
+    this.nebulaClouds = [
+      {
+        x: this.canvas.width * 0.2,
+        y: this.canvas.height * 0.3,
+        radius: 300,
+        color: '0, 191, 255',
+        opacity: 0.08,
+      },
+      {
+        x: this.canvas.width * 0.8,
+        y: this.canvas.height * 0.4,
+        radius: 350,
+        color: '255, 0, 68',
+        opacity: 0.06,
+      },
+      {
+        x: this.canvas.width * 0.5,
+        y: this.canvas.height * 0.8,
+        radius: 250,
+        color: '120, 0, 255',
+        opacity: 0.05,
+      },
+    ];
+  },
+
+  animate() {
+    if (!this.ctx) return;
+
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // Draw nebula clouds
+    this.nebulaClouds.forEach(cloud => {
+      const gradient = this.ctx.createRadialGradient(
+        cloud.x, cloud.y, 0,
+        cloud.x, cloud.y, cloud.radius
+      );
+      gradient.addColorStop(0, `rgba(${cloud.color}, ${cloud.opacity})`);
+      gradient.addColorStop(0.5, `rgba(${cloud.color}, ${cloud.opacity * 0.5})`);
+      gradient.addColorStop(1, 'transparent');
+
+      this.ctx.fillStyle = gradient;
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    });
+
+    // Draw particles
+    this.particles.forEach(particle => {
+      particle.x += particle.speedX;
+      particle.y += particle.speedY;
+      particle.pulse += particle.pulseSpeed;
+
+      // Wrap around edges
+      if (particle.x < 0) particle.x = this.canvas.width;
+      if (particle.x > this.canvas.width) particle.x = 0;
+      if (particle.y < 0) particle.y = this.canvas.height;
+      if (particle.y > this.canvas.height) particle.y = 0;
+
+      const currentOpacity = particle.opacity * (0.7 + Math.sin(particle.pulse) * 0.3);
+      const currentRadius = particle.radius * (0.9 + Math.sin(particle.pulse) * 0.1);
+
+      this.ctx.beginPath();
+      this.ctx.arc(particle.x, particle.y, currentRadius, 0, Math.PI * 2);
+      this.ctx.fillStyle = `rgba(${particle.color}, ${currentOpacity})`;
+      this.ctx.fill();
+
+      // Add glow effect
+      const glow = this.ctx.createRadialGradient(
+        particle.x, particle.y, 0,
+        particle.x, particle.y, currentRadius * 3
+      );
+      glow.addColorStop(0, `rgba(${particle.color}, ${currentOpacity * 0.4})`);
+      glow.addColorStop(1, 'transparent');
+
+      this.ctx.beginPath();
+      this.ctx.arc(particle.x, particle.y, currentRadius * 3, 0, Math.PI * 2);
+      this.ctx.fillStyle = glow;
+      this.ctx.fill();
+    });
+
+    this.animationId = requestAnimationFrame(() => this.animate());
+  },
+
+  destroy() {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+    }
+  },
+};
+
+/* ===========================
+   ANIMATED NUMBER COUNTER
+   =========================== */
+const AnimatedCounter = {
+  animate(element, target, duration = 1000, prefix = '', suffix = '') {
+    const start = parseFloat(element.textContent.replace(/[^\d.-]/g, '')) || 0;
+    const end = parseFloat(target);
+    const range = end - start;
+    const startTime = performance.now();
+
+    const update = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Easing function for smooth animation
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const current = start + range * easeOutQuart;
+
+      element.textContent = prefix + this.formatNumber(current) + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        element.textContent = prefix + this.formatNumber(end) + suffix;
+      }
+    };
+
+    requestAnimationFrame(update);
+  },
+
+  formatNumber(num) {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'K';
+    }
+    return Math.floor(num).toLocaleString();
+  },
+};
+
+/* ===========================
+   COIN SPARKLE EFFECT
+   =========================== */
+const SparkleEffect = {
+  create(element, count = 12) {
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    for (let i = 0; i < count; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.style.cssText = `
+        position: fixed;
+        left: ${centerX}px;
+        top: ${centerY}px;
+        width: 6px;
+        height: 6px;
+        background: #ffd700;
         border-radius: 50%;
-        left: ${Math.random() * 100}%;
-        top: ${Math.random() * 100}%;
-        opacity: ${Math.random()};
-        animation: twinkle ${2 + Math.random() * 4}s infinite;
+        pointer-events: none;
+        z-index: 9999;
+        box-shadow: 0 0 10px #ffd700;
       `;
-      starsContainer.appendChild(star);
+      document.body.appendChild(sparkle);
+
+      const angle = (Math.PI * 2 * i) / count;
+      const distance = 60 + Math.random() * 40;
+      const duration = 600 + Math.random() * 400;
+
+      sparkle.animate([
+        { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+        {
+          transform: `translate(calc(-50% + ${Math.cos(angle) * distance}px), calc(-50% + ${Math.sin(angle) * distance}px)) scale(0)`,
+          opacity: 0,
+        },
+      ], {
+        duration: duration,
+        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      });
+
+      setTimeout(() => sparkle.remove(), duration);
+    }
+  },
+};
+
+/* ===========================
+   SCREEN TRANSITIONS
+   =========================== */
+const ScreenManager = {
+  currentScreen: 'splash',
+
+  show(screenId, direction = 'forward') {
+    const current = document.getElementById(this.currentScreen);
+    const next = document.getElementById(screenId);
+
+    if (!next || this.currentScreen === screenId) return;
+
+    // Animate out current screen
+    if (current) {
+      current.style.animation = 'fadeOut 0.3s ease-out forwards';
     }
 
-    const style = document.createElement('style');
-    style.innerHTML = `
-      @keyframes twinkle {
-        0% { opacity: 0.2; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.5); }
-        100% { opacity: 0.2; transform: scale(1); }
+    // Prepare next screen
+    next.style.display = 'block';
+    next.style.opacity = '0';
+    next.style.animation = 'fadeIn 0.4s ease-out 0.3s forwards';
+
+    // Update bottom nav
+    this.updateBottomNav(screenId);
+
+    setTimeout(() => {
+      if (current) current.style.display = 'none';
+      this.currentScreen = screenId;
+    }, 300);
+  },
+
+  updateBottomNav(screenId) {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      item.classList.remove('active');
+    });
+
+    const navMap = {
+      dashboard: 0,
+      play: 1,
+      leaderboard: 2,
+      wallet: 3,
+      profile: 4,
+    };
+
+    const index = navMap[screenId];
+    if (index !== undefined && navItems[index]) {
+      navItems[index].classList.add('active');
+    }
+  },
+};
+
+/* ===========================
+   MAIN APP CONTROLLER
+   =========================== */
+const App = {
+  init() {
+    ParticleSystem.init();
+    this.bindEvents();
+    this.checkSession();
+
+    // Hide splash after delay
+    setTimeout(() => {
+      const splash = document.getElementById('splash');
+      if (splash && splash.classList.contains('active')) {
+        this.hideSplash();
       }
-    `;
-    document.head.appendChild(style);
+    }, 2500);
+  },
+
+  hideSplash() {
+    const splash = document.getElementById('splash');
+    const landing = document.getElementById('landing');
+
+    if (splash) {
+      splash.style.animation = 'fadeOut 0.5s ease-out forwards';
+    }
+
+    setTimeout(() => {
+      if (splash) splash.style.display = 'none';
+      if (landing) landing.classList.add('active');
+    }, 500);
   },
 
   bindEvents() {
@@ -50,6 +318,19 @@ const App = {
     if (telegramLoginBtn) {
       telegramLoginBtn.addEventListener('click', () => this.telegramLogin());
     }
+
+    // Add pulse effect to buttons
+    document.querySelectorAll('.glow-btn, .mode-btn, .choice-btn').forEach(btn => {
+      btn.addEventListener('mousedown', () => {
+        btn.style.transform = 'scale(0.95)';
+      });
+      btn.addEventListener('mouseup', () => {
+        btn.style.transform = '';
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+      });
+    });
   },
 
   checkSession() {
@@ -73,6 +354,13 @@ const App = {
           return;
         }
 
+        // Show loading state
+        const loginBtn = document.querySelector('.glow-btn');
+        if (loginBtn) {
+          loginBtn.innerHTML = '<span class="btn-text">CONNECTING...</span>';
+          loginBtn.disabled = true;
+        }
+
         const response = await fetch(`${API_BASE}/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -91,6 +379,10 @@ const App = {
           this.showDashboard();
         } else {
           alert(result.error || 'Login failed');
+          if (loginBtn) {
+            loginBtn.innerHTML = '<span class="btn-text">ENTER THE VERSE</span><span class="btn-glow"></span>';
+            loginBtn.disabled = false;
+          }
         }
       } else {
         alert('This app must be opened from Telegram');
@@ -102,20 +394,31 @@ const App = {
   },
 
   showDashboard() {
-    document.getElementById('main').style.display = 'none';
-    document.getElementById('splash').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
+    const splash = document.getElementById('splash');
+    const landing = document.getElementById('landing');
+    const dashboard = document.getElementById('dashboard');
 
-    this.updateDashboardUI();
+    if (splash) splash.style.display = 'none';
+    if (landing) landing.style.display = 'none';
+    if (dashboard) {
+      dashboard.classList.add('active');
+      this.updateDashboardUI();
+    }
+
+    ScreenManager.currentScreen = 'dashboard';
   },
 
-  async updateDashboardUI() {
+  updateDashboardUI() {
     if (!currentWarrior) return;
 
-    document.getElementById('mimBalance').textContent = currentWarrior.mimBalance || 0;
-    document.getElementById('vusdtBalance').textContent = currentWarrior.vusdtBalance || 0;
-    document.getElementById('skillScore').textContent = currentWarrior.skillScore || 0;
-    document.getElementById('warriorName').textContent = currentWarrior.displayName || 'Warrior';
+    AnimatedCounter.animate(document.getElementById('mimBalance'), currentWarrior.mimBalance || 0, 800);
+    AnimatedCounter.animate(document.getElementById('vusdtBalance'), currentWarrior.vusdtBalance || 0, 800);
+    AnimatedCounter.animate(document.getElementById('skillScore'), currentWarrior.skillScore || 0, 800);
+
+    const warriorName = document.getElementById('warriorName');
+    if (warriorName) {
+      warriorName.textContent = currentWarrior.displayName || 'Warrior';
+    }
   },
 
   logout() {
@@ -124,11 +427,22 @@ const App = {
     authToken = null;
     currentWarrior = null;
 
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('main').style.display = 'block';
+    const dashboard = document.getElementById('dashboard');
+    const landing = document.getElementById('landing');
+
+    if (dashboard) dashboard.classList.remove('active');
+    if (landing) {
+      landing.style.display = 'block';
+      landing.classList.add('active');
+    }
+
+    ScreenManager.currentScreen = 'landing';
   },
 };
 
+/* ===========================
+   API SERVICE
+   =========================== */
 const API = {
   async get(endpoint) {
     const response = await fetch(`${API_BASE}${endpoint}`, {
@@ -150,6 +464,9 @@ const API = {
   },
 };
 
+/* ===========================
+   ROUTER
+   =========================== */
 const Router = {
   screens: {},
 
@@ -161,6 +478,7 @@ const Router = {
     Object.keys(this.screens).forEach(key => {
       const screen = document.getElementById(this.screens[key].elementId);
       if (screen) {
+        screen.classList.remove('active');
         screen.style.display = 'none';
       }
     });
@@ -170,12 +488,18 @@ const Router = {
       const element = document.getElementById(target.elementId);
       if (element) {
         element.style.display = 'block';
+        element.classList.add('active');
         if (target.showFn) target.showFn();
       }
     }
+
+    ScreenManager.currentScreen = name;
   },
 };
 
+/* ===========================
+   RPS GAME LOGIC
+   =========================== */
 const RPS = {
   choices: ['rock', 'paper', 'scissors'],
   beats: { rock: 'scissors', scissors: 'paper', paper: 'rock' },
@@ -194,45 +518,16 @@ const RPS = {
 
     return { playerChoice, opponentChoice, result };
   },
-};
 
-document.addEventListener('DOMContentLoaded', () => {
-  App.init();
-  Router.register('dashboard', 'dashboard', () => App.updateDashboardUI());
-  Router.register('play', 'play', () => Game.reset());
-  Router.register('leaderboard', 'leaderboard', () => Leaderboard.load('skillscore'));
-  Router.register('wallet', 'wallet', () => Wallet.load());
-  Router.register('profile', 'profile', () => Profile.load());
-  Router.register('dailyReward', 'dailyReward', () => {});
-  Router.register('victory', 'victoryScreen', () => {});
-});
-
-const Router = {
-  screens: {},
-
-  register(name, elementId, showFn) {
-    this.screens[name] = { elementId, showFn };
-  },
-
-  show(name) {
-    Object.keys(this.screens).forEach(key => {
-      const screen = document.getElementById(this.screens[key].elementId);
-      if (screen) {
-        screen.style.display = 'none';
-      }
-    });
-
-    const target = this.screens[name];
-    if (target) {
-      const element = document.getElementById(target.elementId);
-      if (element) {
-        element.style.display = 'block';
-        if (target.showFn) target.showFn();
-      }
-    }
+  getEmoji(choice) {
+    const emojis = { rock: '🪨', paper: '📄', scissors: '✂️' };
+    return emojis[choice] || choice;
   },
 };
 
+/* ===========================
+   GAME CONTROLLER
+   =========================== */
 const Game = {
   gameType: null,
   opponentType: null,
@@ -258,6 +553,12 @@ const Game = {
         Router.show('play');
         document.getElementById('matchSetup').style.display = 'none';
         document.getElementById('rpsGame').style.display = 'block';
+
+        // Update opponent name
+        const opponentNameEl = document.getElementById('opponentName');
+        if (opponentNameEl) {
+          opponentNameEl.textContent = opponentType === 'ai' ? 'AI' : 'Player';
+        }
       }
     } catch (error) {
       alert('Failed to create match');
@@ -268,9 +569,9 @@ const Game = {
     if (!currentMatch) return;
 
     const result = RPS.play(choice);
-
     this.roundResult = result;
 
+    // Disable all buttons
     document.querySelectorAll('.choice-btn').forEach(btn => {
       btn.disabled = true;
       if (btn.dataset.choice === choice) {
@@ -278,13 +579,17 @@ const Game = {
       }
     });
 
-    document.getElementById('roundResult').innerHTML = `
-      <div class="result-display">
-        <div class="player-choice">You: ${this.getEmoji(choice)}</div>
-        <div class="opponent-choice">AI: ${this.getEmoji(result.opponentChoice)}</div>
-        <div class="result-text ${result.result}">${result.result.toUpperCase()}</div>
-      </div>
-    `;
+    // Show result with animation
+    const roundResultEl = document.getElementById('roundResult');
+    if (roundResultEl) {
+      roundResultEl.innerHTML = `
+        <div class="result-display">
+          <div class="player-choice">You: ${RPS.getEmoji(choice)}</div>
+          <div class="opponent-choice">AI: ${RPS.getEmoji(result.opponentChoice)}</div>
+          <div class="result-text ${result.result}">${result.result.toUpperCase()}</div>
+        </div>
+      `;
+    }
 
     this.submitResult(result);
   },
@@ -309,26 +614,47 @@ const Game = {
     const icon = document.getElementById('victoryIcon');
     const title = document.getElementById('victoryTitle');
     const message = document.getElementById('victoryMessage');
+    const skillScoreEl = document.getElementById('rewardSkillScore');
+    const mimEl = document.getElementById('rewardMim');
 
     if (result.result === 'win') {
-      icon.textContent = '🏆';
-      title.textContent = 'Victory!';
-      message.textContent = 'You dominated the battle!';
+      if (icon) icon.textContent = '🏆';
+      if (title) {
+        title.textContent = 'Victory!';
+        title.style.background = 'linear-gradient(135deg, #00ff88, #00bfff)';
+        title.style.webkitBackgroundClip = 'text';
+      }
+      if (message) message.textContent = 'You dominated the battle!';
     } else if (result.result === 'draw') {
-      icon.textContent = '🤝';
-      title.textContent = 'Draw!';
-      message.textContent = 'Great minds think alike!';
+      if (icon) icon.textContent = '🤝';
+      if (title) {
+        title.textContent = 'Draw!';
+        title.style.background = 'linear-gradient(135deg, #ffaa00, #ff6600)';
+        title.style.webkitBackgroundClip = 'text';
+      }
+      if (message) message.textContent = 'Great minds think alike!';
     } else {
-      icon.textContent = '💔';
-      title.textContent = 'Defeat';
-      message.textContent = 'Better luck next time!';
+      if (icon) icon.textContent = '💔';
+      if (title) {
+        title.textContent = 'Defeat';
+        title.style.background = 'linear-gradient(135deg, #ff0044, #ff6600)';
+        title.style.webkitBackgroundClip = 'text';
+      }
+      if (message) message.textContent = 'Better luck next time!';
     }
 
-    document.getElementById('rewardSkillScore').textContent = `+${rewards.skillScore}`;
-    document.getElementById('rewardMim').textContent = `+${rewards.mim}`;
+    if (skillScoreEl) AnimatedCounter.animate(skillScoreEl, rewards.skillScore, 800, '+');
+    if (mimEl) AnimatedCounter.animate(mimEl, rewards.mim, 800, '+');
+
+    // Add sparkle effect
+    if (result.result === 'win') {
+      setTimeout(() => {
+        const victoryIcon = document.getElementById('victoryIcon');
+        if (victoryIcon) SparkleEffect.create(victoryIcon, 20);
+      }, 300);
+    }
 
     Router.show('victory');
-
     App.updateDashboardUI();
   },
 
@@ -336,6 +662,12 @@ const Game = {
     try {
       const response = await API.post('/wallet/daily-reward');
       if (response.success) {
+        // Create sparkle effect
+        const rewardCard = document.querySelector('.reward-card');
+        if (rewardCard) {
+          SparkleEffect.create(rewardCard, 15);
+        }
+
         alert(`Claimed ${response.data.amount} ${response.data.currency}!`);
         App.updateDashboardUI();
         Router.show('dashboard');
@@ -368,20 +700,30 @@ const Game = {
     this.reset();
     Router.show('dashboard');
   },
-
-  getEmoji(choice) {
-    const emojis = { rock: '🪨', paper: '📄', scissors: '✂️' };
-    return emojis[choice] || choice;
-  },
 };
 
+/* ===========================
+   LEADERBOARD CONTROLLER
+   =========================== */
 const Leaderboard = {
   async load(tab) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active');
+    const activeTab = document.querySelector(`[data-tab="${tab}"]`);
+    if (activeTab) activeTab.classList.add('active');
 
     const content = document.getElementById('leaderboardContent');
-    content.innerHTML = '<div class="loading">Loading...</div>';
+    if (content) {
+      content.innerHTML = `
+        <div class="loading-state">
+          <div class="energy-ring small">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+          </div>
+          <p>Loading rankings...</p>
+        </div>
+      `;
+    }
 
     try {
       let endpoint;
@@ -400,27 +742,37 @@ const Leaderboard = {
         this.render(response.data);
       }
     } catch (error) {
-      content.innerHTML = '<div class="error">Failed to load leaderboard</div>';
+      if (content) {
+        content.innerHTML = '<div class="error-state">Failed to load leaderboard</div>';
+      }
     }
   },
 
   render(data) {
     const content = document.getElementById('leaderboardContent');
+    if (!content) return;
 
     if (!data || data.length === 0) {
-      content.innerHTML = '<div class="empty">No data available</div>';
+      content.innerHTML = '<div class="empty-state">No data available</div>';
       return;
     }
 
-    content.innerHTML = data.map((item, index) => `
-      <div class="leaderboard-item ${item.warrior_id === currentWarrior?.warriorId ? 'highlight' : ''}">
-        <div class="rank">#${item.rank || index + 1}</div>
-        <div class="player-info">
-          <div class="player-name">${item.display_name}</div>
-          <div class="player-details">${this.getDetails(item)}</div>
+    content.innerHTML = data.map((item, index) => {
+      const rankClass = index < 3 ? 'top' : '';
+      const isCurrentUser = item.warrior_id === currentWarrior?.warriorId;
+      const highlightClass = isCurrentUser ? 'highlight' : '';
+      const staggerClass = 'stagger-item';
+
+      return `
+        <div class="leaderboard-item ${highlightClass} ${staggerClass}" style="animation-delay: ${index * 0.05}s">
+          <div class="rank ${rankClass}">#${item.rank || index + 1}</div>
+          <div class="player-info">
+            <div class="player-name">${item.display_name}</div>
+            <div class="player-details">${this.getDetails(item)}</div>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   },
 
   getDetails(item) {
@@ -437,6 +789,9 @@ const Leaderboard = {
   },
 };
 
+/* ===========================
+   WALLET CONTROLLER
+   =========================== */
 const Wallet = {
   async load() {
     try {
@@ -446,8 +801,11 @@ const Wallet = {
       ]);
 
       if (walletRes.success) {
-        document.getElementById('walletMim').textContent = walletRes.data.mim_balance || 0;
-        document.getElementById('walletVusdt').textContent = walletRes.data.vusdt_balance || 0;
+        const mimEl = document.getElementById('walletMim');
+        const vusdtEl = document.getElementById('walletVusdt');
+
+        if (mimEl) AnimatedCounter.animate(mimEl, walletRes.data.mim_balance || 0, 800);
+        if (vusdtEl) AnimatedCounter.animate(vusdtEl, walletRes.data.vusdt_balance || 0, 800);
       }
 
       if (historyRes.success) {
@@ -460,26 +818,30 @@ const Wallet = {
 
   renderHistory(transactions) {
     const list = document.getElementById('transactionList');
+    if (!list) return;
 
     if (!transactions || transactions.length === 0) {
-      list.innerHTML = '<div class="empty">No transactions yet</div>';
+      list.innerHTML = '<div class="empty-state">No transactions yet</div>';
       return;
     }
 
-    list.innerHTML = transactions.map(tx => `
-      <div class="transaction-item">
+    list.innerHTML = transactions.map((tx, index) => `
+      <div class="transaction-item stagger-item" style="animation-delay: ${index * 0.05}s">
         <div class="tx-info">
           <div class="tx-type">${tx.type.replace(/_/g, ' ')}</div>
           <div class="tx-date">${new Date(tx.created_at).toLocaleDateString()}</div>
         </div>
-        <div class="tx-amount ${tx.type.includes('reward') ? 'positive' : 'negative'}">
-          ${tx.type.includes('reward') || tx.type.includes('claim') ? '+' : ''}${tx.amount} ${tx.currency}
+        <div class="tx-amount ${tx.type.includes('reward') || tx.type.includes('claim') ? 'positive' : 'negative'}">
+          ${tx.type.includes('reward') || tx.type.includes('claim') ? '+' : '-'}${tx.amount} ${tx.currency}
         </div>
       </div>
     `).join('');
   },
 };
 
+/* ===========================
+   PROFILE CONTROLLER
+   =========================== */
 const Profile = {
   async load() {
     try {
@@ -490,12 +852,24 @@ const Profile = {
 
       if (profileRes.success) {
         const p = profileRes.data;
-        document.getElementById('profileName').textContent = p.display_name || 'Warrior';
-        document.getElementById('profileId').textContent = `ID: #${p.warrior_id}`;
-        document.getElementById('profileWins').textContent = p.total_wins || 0;
-        document.getElementById('profileLosses').textContent = p.total_losses || 0;
-        document.getElementById('profileDraws').textContent = p.total_draws || 0;
-        document.getElementById('profileWinRate').textContent = `${p.win_rate || 0}%`;
+        const nameEl = document.getElementById('profileName');
+        const idEl = document.getElementById('profileId');
+
+        if (nameEl) nameEl.textContent = p.display_name || 'Warrior';
+        if (idEl) idEl.textContent = `ID: #${p.warrior_id}`;
+      }
+
+      if (statsRes.success) {
+        const s = statsRes.data;
+        const winsEl = document.getElementById('profileWins');
+        const lossesEl = document.getElementById('profileLosses');
+        const drawsEl = document.getElementById('profileDraws');
+        const winRateEl = document.getElementById('profileWinRate');
+
+        if (winsEl) AnimatedCounter.animate(winsEl, s.total_wins || 0, 600);
+        if (lossesEl) AnimatedCounter.animate(lossesEl, s.total_losses || 0, 600);
+        if (drawsEl) AnimatedCounter.animate(drawsEl, s.total_draws || 0, 600);
+        if (winRateEl) AnimatedCounter.animate(winRateEl, s.win_rate || 0, 600, '', '%');
       }
     } catch (error) {
       console.error('Profile load error:', error);
@@ -503,22 +877,26 @@ const Profile = {
   },
 };
 
-const RPS = {
-  choices: ['rock', 'paper', 'scissors'],
-  beats: { rock: 'scissors', scissors: 'paper', paper: 'rock' },
+/* ===========================
+   INITIALIZATION
+   =========================== */
+document.addEventListener('DOMContentLoaded', () => {
+  App.init();
+  Router.register('dashboard', 'dashboard', () => App.updateDashboardUI());
+  Router.register('play', 'play', () => Game.reset());
+  Router.register('leaderboard', 'leaderboard', () => Leaderboard.load('skillscore'));
+  Router.register('wallet', 'wallet', () => Wallet.load());
+  Router.register('profile', 'profile', () => Profile.load());
+  Router.register('dailyReward', 'dailyReward', () => {});
+  Router.register('victory', 'victoryScreen', () => {});
+});
 
-  play(playerChoice) {
-    const opponentChoice = this.choices[Math.floor(Math.random() * 3)];
-
-    let result;
-    if (playerChoice === opponentChoice) {
-      result = 'draw';
-    } else if (this.beats[playerChoice] === opponentChoice) {
-      result = 'win';
-    } else {
-      result = 'loss';
-    }
-
-    return { playerChoice, opponentChoice, result };
-  },
-};
+/* Add fadeOut animation */
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+`;
+document.head.appendChild(style);
