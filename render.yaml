@@ -1,0 +1,20 @@
+{
+  "version": "1",
+  "services": {
+    "skillverse-backend": {
+      "buildCommand": "cd backend && npm install",
+      "startCommand": "cd backend && node server.js",
+      "plan": "free",
+      "region": "us-west",
+      "healthCheckPath": "/health",
+      "envVars": {
+        "NODE_ENV": "production",
+        "PORT": "${{PORT}}",
+        "JWT_SECRET": {
+          "sync": false,
+          "value": "generate-secure-secret"
+        }
+      }
+    }
+  }
+}
