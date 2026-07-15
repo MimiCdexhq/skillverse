@@ -1,258 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>SkillVerse</title>
-
-<link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SkillVerse</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-
 <body>
-
-<div id="stars"></div>
-
-<!-- Splash Screen -->
-
-<div id="splash">
-
-<div class="sv-logo">
-
-SV
-
-</div>
-
-<h1>SKILLVERSE</h1>
-
-<p>Play • Compete • Earn</p>
-
-<div class="loading">
-
-<div class="loading-bar"></div>
-
-</div>
-
-</div>
-
-<!-- Main Website -->
-
-<div id="main">
-
-<header>
-
-<nav>
-
-<div class="brand">
-
-⚔️ SkillVerse
-
-</div>
-
-<button class="telegram">
-
-Telegram Login
-
-</button>
-
-</nav>
-
-<section class="hero">
-
-<div class="hero-logo">
-
-<img src="assets/logo.png" alt="SkillVerse Logo">
-
-</div>
-
-<h1>
-
-Play.
-
-<span>Compete.</span>
-
-Earn.
-
-</h1>
-
-<p>
-
-The Ultimate Skill Gaming Universe
-
-</p>
-
-<button class="enter">
-
-ENTER THE VERSE
-
-</button>
-
-</section>
-
-</header>
-
-<section class="features">
-
-<div class="card">
-
-🎮
-
-<h2>PLAY</h2>
-
-<p>
-
-Challenge players in skill games.
-
-</p>
-
-</div>
-
-<div class="card">
-
-⚔️
-
-<h2>COMPETE</h2>
-
-<p>
-
-Climb the global leaderboard.
-
-</p>
-
-</div>
-
-<div class="card">
-
-🏆
-
-<h2>EARN</h2>
-
-<p>
-
-Earn MIM and seasonal rewards.
-
-</p>
-
-</div>
-
-</section>
-
-<section class="stats">
-
-<div>
-
-<h2>10B</h2>
-
-<p>MIM Supply</p>
-
-</div>
-
-<div>
-
-<h2>100-10K</h2>
-
-<p>Stake Range</p>
-
-</div>
-
-<div>
-
-<h2>Season 1</h2>
-
-<p>Founder Rewards</p>
-
-</div>
-
-</section>
-
-<footer>
-
-<p>
-
-© 2026 SkillVerse
-
-</p>
-
-</footer>
-
-</div>
-
-<script src="script.js"></script>
-
-<!-- DASHBOARD -->
-
-<div id="dashboard" style="display:none;">
-
+  <div id="stars"></div>
+
+  <!-- Splash Screen -->
+  <div id="splash">
+    <div class="sv-logo">SV</div>
+    <h1>SKILLVERSE</h1>
+    <p>Play • Compete • Earn</p>
+    <div class="loading">
+      <div class="loading-bar"></div>
+    </div>
+  </div>
+
+  <!-- Landing Page -->
+  <div id="main">
+    <header>
+      <nav>
+        <div class="brand">⚔️ SkillVerse</div>
+        <button id="telegramLoginBtn" class="telegram">Telegram Login</button>
+      </nav>
+      <section class="hero">
+        <div class="hero-logo">
+          <img src="assets/logo.png" alt="SkillVerse Logo">
+        </div>
+        <h1>Play.<span>Compete.</span>Earn.</h1>
+        <p>The Ultimate Skill Gaming Universe</p>
+        <button class="enter" onclick="App.telegramLogin()">ENTER THE VERSE</button>
+      </section>
+    </header>
+
+    <section class="features">
+      <div class="card">
+        <span class="card-icon">🎮</span>
+        <h2>PLAY</h2>
+        <p>Challenge players in skill games</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">⚔️</span>
+        <h2>COMPETE</h2>
+        <p>Climb the global leaderboard</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏆</span>
+        <h2>EARN</h2>
+        <p>Earn MIM and seasonal rewards</p>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div>
+        <h2>10B</h2>
+        <p>MIM Supply</p>
+      </div>
+      <div>
+        <h2>100-10K</h2>
+        <p>Stake Range</p>
+      </div>
+      <div>
+        <h2>Season 1</h2>
+        <p>Founder Rewards</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2026 SkillVerse</p>
+    </footer>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" style="display:none;">
     <header class="dash-header">
-        <h2>⚔️ SkillVerse</h2>
-        <p>Welcome Back, Warrior</p>
+      <h2>⚔️ SkillVerse</h2>
+      <p id="warriorName">Welcome Back, Warrior</p>
     </header>
 
     <section class="wallet">
-
-        <div class="wallet-card">
-            <h3>🪙 MIM</h3>
-            <h1>500</h1>
-        </div>
-
-        <div class="wallet-card">
-            <h3>💎 vUSDT</h3>
-            <h1>0</h1>
-        </div>
-
-        <div class="wallet-card">
-            <h3>⭐ SkillScore</h3>
-            <h1>0</h1>
-        </div>
-
+      <div class="wallet-card">
+        <h3>🪙 MIM</h3>
+        <h1 id="mimBalance">0</h1>
+      </div>
+      <div class="wallet-card">
+        <h3>💎 vUSDT</h3>
+        <h1 id="vusdtBalance">0</h1>
+      </div>
+      <div class="wallet-card">
+        <h3>⭐ SkillScore</h3>
+        <h1 id="skillScore">0</h1>
+      </div>
     </section>
 
-    <button class="play-now">
-        ⚔️ PLAY NOW
+    <button class="play-now" onclick="Router.show('play')">
+      ⚔️ PLAY NOW
     </button>
 
     <section class="menu">
-
-        <div class="menu-item">
-            🎁
-            <p>Daily Reward</p>
-        </div>
-
-        <div class="menu-item">
-            🏆
-            <p>Leaderboard</p>
-        </div>
-
-        <div class="menu-item">
-            💰
-            <p>Wallet</p>
-        </div>
-
-        <div class="menu-item">
-            👤
-            <p>Warrior Base</p>
-        </div>
-
+      <div class="menu-item" onclick="Router.show('dailyReward')">
+        🎁<p>Daily Reward</p>
+      </div>
+      <div class="menu-item" onclick="Router.show('leaderboard')">
+        🏆<p>Leaderboard</p>
+      </div>
+      <div class="menu-item" onclick="Router.show('wallet')">
+        💰<p>Wallet</p>
+      </div>
+      <div class="menu-item" onclick="Router.show('profile')">
+        👤<p>Warrior Base</p>
+      </div>
     </section>
 
     <nav class="bottom-nav">
-
-        <div>🏠<br>Home</div>
-
-        <div>🎮<br>Play</div>
-
-        <div>🏆<br>Rank</div>
-
-        <div>💰<br>Wallet</div>
-
-        <div>👤<br>Profile</div>
-
+      <div onclick="Router.show('dashboard')">🏠<br>Home</div>
+      <div onclick="Router.show('play')">🎮<br>Play</div>
+      <div onclick="Router.show('leaderboard')">🏆<br>Rank</div>
+      <div onclick="Router.show('wallet')">💰<br>Wallet</div>
+      <div onclick="Router.show('profile')">👤<br>Profile</div>
     </nav>
+  </div>
 
-</div>
+  <!-- Play Screen -->
+  <div id="play" style="display:none;" class="screen">
+    <header class="screen-header">
+      <button class="back-btn" onclick="Router.show('dashboard')">← Back</button>
+      <h2>Choose Your Battle</h2>
+    </header>
 
+    <section class="game-selection">
+      <div class="game-card" onclick="Game.select('rps')">
+        <div class="game-icon">✂️</div>
+        <h3>Rock Paper Scissors</h3>
+        <p>Classic strategy game</p>
+      </div>
+    </section>
+
+    <div id="matchSetup" style="display:none;" class="match-setup">
+      <h3>Match Type</h3>
+      <div class="mode-options">
+        <button class="mode-btn" onclick="Game.startMatch('ai')">🤖 vs AI</button>
+        <button class="mode-btn" onclick="Game.startMatch('pvp')">⚔️ vs Player</button>
+      </div>
+    </div>
+
+    <!-- RPS Game Screen -->
+    <div id="rpsGame" style="display:none;" class="game-screen">
+      <div class="game-header">
+        <div class="player-info">
+          <span id="playerName">You</span>
+          <span id="playerScore">0</span>
+        </div>
+        <div class="vs">VS</div>
+        <div class="opponent-info">
+          <span id="opponentName">AI</span>
+          <span id="opponentScore">0</span>
+        </div>
+      </div>
+
+      <div class="round-result" id="roundResult"></div>
+
+      <div class="choices">
+        <button class="choice-btn" data-choice="rock" onclick="Game.makeChoice('rock')">
+          <span class="choice-icon">🪨</span>
+          <span>Rock</span>
+        </button>
+        <button class="choice-btn" data-choice="paper" onclick="Game.makeChoice('paper')">
+          <span class="choice-icon">📄</span>
+          <span>Paper</span>
+        </button>
+        <button class="choice-btn" data-choice="scissors" onclick="Game.makeChoice('scissors')">
+          <span class="choice-icon">✂️</span>
+          <span>Scissors</span>
+        </button>
+      </div>
+
+      <div class="game-actions">
+        <button class="action-btn secondary" onclick="Game.endMatch()">Forfeit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaderboard Screen -->
+  <div id="leaderboard" style="display:none;" class="screen">
+    <header class="screen-header">
+      <button class="back-btn" onclick="Router.show('dashboard')">← Back</button>
+      <h2>Leaderboards</h2>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="skillscore" onclick="Leaderboard.switchTab('skillscore')">SkillScore</button>
+      <button class="tab" data-tab="mim" onclick="Leaderboard.switchTab('mim')">MIM</button>
+      <button class="tab" data-tab="games" onclick="Leaderboard.switchTab('games')">Games</button>
+      <button class="tab" data-tab="streak" onclick="Leaderboard.switchTab('streak')">Streak</button>
+      <button class="tab" data-tab="referrals" onclick="Leaderboard.switchTab('referrals')">Referrals</button>
+    </div>
+
+    <div id="leaderboardContent" class="leaderboard-content">
+      <div class="loading">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Wallet Screen -->
+  <div id="wallet" style="display:none;" class="screen">
+    <header class="screen-header">
+      <button class="back-btn" onclick="Router.show('dashboard')">← Back</button>
+      <h2>Wallet</h2>
+    </header>
+
+    <section class="wallet-detail">
+      <div class="wallet-card large">
+        <h3>🪙 MIM Balance</h3>
+        <h1 id="walletMim">0</h1>
+      </div>
+      <div class="wallet-card large">
+        <h3>💎 vUSDT</h3>
+        <h1 id="walletVusdt">0</h1>
+      </div>
+    </section>
+
+    <section class="transactions">
+      <h3>Transaction History</h3>
+      <div id="transactionList" class="transaction-list">
+        <div class="loading">Loading...</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Profile Screen -->
+  <div id="profile" style="display:none;" class="screen">
+    <header class="screen-header">
+      <button class="back-btn" onclick="Router.show('dashboard')">← Back</button>
+      <h2>Warrior Profile</h2>
+    </header>
+
+    <div class="profile-card">
+      <div class="avatar" id="profileAvatar">👤</div>
+      <h2 id="profileName">Warrior</h2>
+      <p id="profileId">ID: #0000</p>
+    </div>
+
+    <section class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-value" id="profileWins">0</span>
+        <span class="stat-label">Wins</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="profileLosses">0</span>
+        <span class="stat-label">Losses</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="profileDraws">0</span>
+        <span class="stat-label">Draws</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="profileWinRate">0%</span>
+        <span class="stat-label">Win Rate</span>
+      </div>
+    </section>
+
+    <section class="profile-actions">
+      <button class="action-btn" onclick="App.logout()">Logout</button>
+    </section>
+  </div>
+
+  <!-- Daily Reward Screen -->
+  <div id="dailyReward" style="display:none;" class="screen">
+    <header class="screen-header">
+      <button class="back-btn" onclick="Router.show('dashboard')">← Back</button>
+      <h2>Daily Reward</h2>
+    </header>
+
+    <div class="reward-card">
+      <div class="reward-icon">🎁</div>
+      <h3>Claim Your Daily Reward</h3>
+      <p>+50 MIM every 24 hours</p>
+      <button class="action-btn primary" onclick="Game.claimDailyReward()">Claim Reward</button>
+    </div>
+  </div>
+
+  <!-- Victory Screen -->
+  <div id="victoryScreen" style="display:none;" class="screen victory">
+    <div class="victory-content">
+      <div class="victory-icon" id="victoryIcon">🏆</div>
+      <h2 id="victoryTitle">Victory!</h2>
+      <p id="victoryMessage">You earned rewards</p>
+
+      <div class="rewards-earned">
+        <div class="reward-item">
+          <span>⭐ SkillScore</span>
+          <span id="rewardSkillScore">+10</span>
+        </div>
+        <div class="reward-item">
+          <span>🪙 MIM</span>
+          <span id="rewardMim">+10</span>
+        </div>
+      </div>
+
+      <button class="action-btn primary" onclick="Game.reset()">Play Again</button>
+      <button class="action-btn secondary" onclick="Router.show('dashboard')">Home</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
-
 </html>
