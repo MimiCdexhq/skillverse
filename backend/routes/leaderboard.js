@@ -1,14 +1,13 @@
 const express = require('express');
-const pool = require('../config/database');
+const db = require('../database');
 
 const router = express.Router();
 
 router.get('/skillscore', async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT warrior_id, username, display_name, skill_score, games_played FROM warriors ORDER BY skill_score DESC LIMIT 100'
-    );
-    res.json(result.rows);
+    const warriors = db.getWarriors();
+    const sorted = warriors.sort((a, b) => (b.skill_score || 0) - (a.skill_score || 0)).slice(0, 100);
+    res.json(sorted);
   } catch (error) {
     console.error('Leaderboard error:', error);
     res.status(500).json({ error: 'Server error fetching leaderboard' });
@@ -17,10 +16,9 @@ router.get('/skillscore', async (req, res) => {
 
 router.get('/mim', async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT warrior_id, username, display_name, mim_balance FROM warriors ORDER BY mim_balance DESC LIMIT 100'
-    );
-    res.json(result.rows);
+    const warriors = db.getWarriors();
+    const sorted = warriors.sort((a, b) => (b.mim_balance || 0) - (a.mim_balance || 0)).slice(0, 100);
+    res.json(sorted);
   } catch (error) {
     console.error('Leaderboard error:', error);
     res.status(500).json({ error: 'Server error fetching MIM leaderboard' });
@@ -29,10 +27,9 @@ router.get('/mim', async (req, res) => {
 
 router.get('/games', async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT warrior_id, username, display_name, games_played FROM warriors ORDER BY games_played DESC LIMIT 100'
-    );
-    res.json(result.rows);
+    const warriors = db.getWarriors();
+    const sorted = warriors.sort((a, b) => (b.games_played || 0) - (a.games_played || 0)).slice(0, 100);
+    res.json(sorted);
   } catch (error) {
     console.error('Leaderboard error:', error);
     res.status(500).json({ error: 'Server error fetching games leaderboard' });
@@ -41,10 +38,9 @@ router.get('/games', async (req, res) => {
 
 router.get('/streak', async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT warrior_id, username, display_name, win_streak FROM warriors ORDER BY win_streak DESC LIMIT 100'
-    );
-    res.json(result.rows);
+    const warriors = db.getWarriors();
+    const sorted = warriors.sort((a, b) => (b.win_streak || 0) - (a.win_streak || 0)).slice(0, 100);
+    res.json(sorted);
   } catch (error) {
     console.error('Leaderboard error:', error);
     res.status(500).json({ error: 'Server error fetching streak leaderboard' });

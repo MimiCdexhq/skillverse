@@ -1,21 +1,21 @@
 const express = require('express');
-const pool = require('../config/database');
+const db = require('../database');
 const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT mim_balance, vusdt_balance FROM warriors WHERE warrior_id = $1',
-      [req.warrior.warriorId]
-    );
+    const warrior = db.getWarriorById(req.warrior.warriorId);
 
-    if (result.rows.length === 0) {
+    if (!warrior) {
       return res.status(404).json({ error: 'Warrior not found' });
     }
 
-    res.json(result.rows[0]);
+    res.json({
+      mim_balance: warrior.mim_balance || 0,
+      vusdt_balance: warrior.vusdt_balance || 0
+    });
   } catch (error) {
     console.error('Wallet error:', error);
     res.status(500).json({ error: 'Server error fetching wallet' });
@@ -25,17 +25,20 @@ router.get('/', authMiddleware, async (req, res) => {
 router.post('/reward', authMiddleware, async (req, res) => {
   try {
     const { type, amount } = req.body;
+    const warrior = db.getWarriorById(req.warrior.warriorId);
+
+    if (!warrior) {
+      return res.status(404).json({ error: 'Warrior not found' });
+    }
 
     if (type === 'mim') {
-      await pool.query(
-        'UPDATE warriors SET mim_balance = mim_balance + $1 WHERE warrior_id = $2',
-        [amount, req.warrior.warriorId]
-      );
+      db.updateWarrior(req.warrior.warriorId, {
+        mim_balance: (warrior.mim_balance || 0) + amount
+      });
     } else if (type === 'vusdt') {
-      await pool.query(
-        'UPDATE warriors SET vusdt_balance = vusdt_balance + $1 WHERE warrior_id = $2',
-        [amount, req.warrior.warriorId]
-      );
+      db.updateWarrior(req.warrior.warriorId, {
+        vusdt_balance: (warrior.vusdt_balance || 0) + amount
+      });
     } else {
       return res.status(400).json({ error: 'Invalid reward type' });
     }
