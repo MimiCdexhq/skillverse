@@ -1,258 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>SkillVerse</title>
-
-<link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SkillVerse</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-<div id="stars"></div>
-
-<!-- Splash Screen -->
-
-<div id="splash">
-
-<div class="sv-logo">
-
-SV
-
-</div>
-
-<h1>SKILLVERSE</h1>
-
-<p>Play • Compete • Earn</p>
-
-<div class="loading">
-
-<div class="loading-bar"></div>
-
-</div>
-
-</div>
-
-<!-- Main Website -->
-
-<div id="main">
-
-<header>
-
-<nav>
-
-<div class="brand">
-
-⚔️ SkillVerse
-
-</div>
-
-<button class="telegram">
-
-Telegram Login
-
-</button>
-
-</nav>
-
-<section class="hero">
-
-<div class="hero-logo">
-
-<img src="assets/logo.png" alt="SkillVerse Logo">
-
-</div>
-
-<h1>
-
-Play.
-
-<span>Compete.</span>
-
-Earn.
-
-</h1>
-
-<p>
-
-The Ultimate Skill Gaming Universe
-
-</p>
-
-<button class="enter">
-
-ENTER THE VERSE
-
-</button>
-
-</section>
-
-</header>
-
-<section class="features">
-
-<div class="card">
-
-🎮
-
-<h2>PLAY</h2>
-
-<p>
-
-Challenge players in skill games.
-
-</p>
-
-</div>
-
-<div class="card">
-
-⚔️
-
-<h2>COMPETE</h2>
-
-<p>
-
-Climb the global leaderboard.
-
-</p>
-
-</div>
-
-<div class="card">
-
-🏆
-
-<h2>EARN</h2>
-
-<p>
-
-Earn MIM and seasonal rewards.
-
-</p>
-
-</div>
-
-</section>
-
-<section class="stats">
-
-<div>
-
-<h2>10B</h2>
-
-<p>MIM Supply</p>
-
-</div>
-
-<div>
-
-<h2>100-10K</h2>
-
-<p>Stake Range</p>
-
-</div>
-
-<div>
-
-<h2>Season 1</h2>
-
-<p>Founder Rewards</p>
-
-</div>
-
-</section>
-
-<footer>
-
-<p>
-
-© 2026 SkillVerse
-
-</p>
-
-</footer>
-
-</div>
-
-<script src="script.js"></script>
-
-<!-- DASHBOARD -->
-
-<div id="dashboard" style="display:none;">
-
-    <header class="dash-header">
+  <div id="stars"></div>
+
+  <div id="splash">
+    <div class="sv-logo">SV</div>
+    <h1>SKILLVERSE</h1>
+    <p>Play • Compete • Earn</p>
+    <div class="loading">
+      <div class="loading-bar"></div>
+    </div>
+  </div>
+
+  <div id="app">
+    <div id="landing" class="screen active">
+      <header>
+        <nav>
+          <div class="brand">⚔️ SkillVerse</div>
+          <button class="telegram" id="telegramLogin">Telegram Login</button>
+        </nav>
+        <section class="hero">
+          <div class="hero-logo">
+            <img src="../assets/logo.png" alt="SkillVerse Logo" onerror="this.style.display='none'">
+          </div>
+          <h1>Play.<span>Compete.</span>Earn.</h1>
+          <p>The Ultimate Skill Gaming Universe</p>
+          <button class="enter" id="enterBtn">ENTER THE VERSE</button>
+        </section>
+      </header>
+      <section class="features">
+        <div class="card">
+          <span class="card-icon">🎮</span>
+          <h2>PLAY</h2>
+          <p>Challenge players in skill games.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">⚔️</span>
+          <h2>COMPETE</h2>
+          <p>Climb the global leaderboard.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🏆</span>
+          <h2>EARN</h2>
+          <p>Earn MIM and seasonal rewards.</p>
+        </div>
+      </section>
+      <section class="stats">
+        <div>
+          <h2>10B</h2>
+          <p>MIM Supply</p>
+        </div>
+        <div>
+          <h2>100-10K</h2>
+          <p>Stake Range</p>
+        </div>
+        <div>
+          <h2>Season 1</h2>
+          <p>Founder Rewards</p>
+        </div>
+      </section>
+      <footer>
+        <p>© 2026 SkillVerse</p>
+      </footer>
+    </div>
+
+    <div id="home" class="screen">
+      <header class="dash-header">
         <h2>⚔️ SkillVerse</h2>
-        <p>Welcome Back, Warrior</p>
-    </header>
-
-    <section class="wallet">
-
+        <p id="welcomeText">Welcome Back, Warrior</p>
+      </header>
+      <section class="wallet">
         <div class="wallet-card">
-            <h3>🪙 MIM</h3>
-            <h1>500</h1>
+          <h3>🪙 MIM</h3>
+          <h1 id="mimBalance">0</h1>
         </div>
-
         <div class="wallet-card">
-            <h3>💎 vUSDT</h3>
-            <h1>0</h1>
+          <h3>💎 vUSDT</h3>
+          <h1 id="vusdtBalance">0</h1>
         </div>
-
         <div class="wallet-card">
-            <h3>⭐ SkillScore</h3>
-            <h1>0</h1>
+          <h3>⭐ SkillScore</h3>
+          <h1 id="skillScore">0</h1>
         </div>
-
-    </section>
-
-    <button class="play-now">
-        ⚔️ PLAY NOW
-    </button>
-
-    <section class="menu">
-
-        <div class="menu-item">
-            🎁
-            <p>Daily Reward</p>
+      </section>
+      <button class="play-now" id="playNowBtn">⚔️ PLAY NOW</button>
+      <section class="menu">
+        <div class="menu-item" data-target="leaderboard">
+          <span class="menu-icon">🏆</span>
+          <p>Leaderboard</p>
         </div>
-
-        <div class="menu-item">
-            🏆
-            <p>Leaderboard</p>
+        <div class="menu-item" data-target="wallet">
+          <span class="menu-icon">💰</span>
+          <p>Wallet</p>
         </div>
-
-        <div class="menu-item">
-            💰
-            <p>Wallet</p>
+        <div class="menu-item" data-target="profile">
+          <span class="menu-icon">👤</span>
+          <p>Warrior Base</p>
         </div>
-
-        <div class="menu-item">
-            👤
-            <p>Warrior Base</p>
+        <div class="menu-item" data-target="play">
+          <span class="menu-icon">🎮</span>
+          <p>Daily Reward</p>
         </div>
+      </section>
+      <nav class="bottom-nav">
+        <div class="nav-item active" data-target="home">🏠<br>Home</div>
+        <div class="nav-item" data-target="play">🎮<br>Play</div>
+        <div class="nav-item" data-target="leaderboard">🏆<br>Rank</div>
+        <div class="nav-item" data-target="wallet">💰<br>Wallet</div>
+        <div class="nav-item" data-target="profile">👤<br>Profile</div>
+      </nav>
+    </div>
 
-    </section>
+    <div id="play" class="screen">
+      <header class="screen-header">
+        <button class="back-btn" data-target="home">← Back</button>
+        <h2>Battle Arena</h2>
+      </header>
+      <section class="play-content">
+        <div class="game-card">
+          <h3>✊ Rock • Paper • Scissors</h3>
+          <p>Classic skill game. Beat your opponent using strategy and luck.</p>
+          <div class="game-modes">
+            <button class="mode-btn" data-mode="practice" data-game="rps">🤖 Practice vs AI</button>
+            <button class="mode-btn" data-mode="casual" data-game="rps">⚔️ Casual PvP</button>
+            <button class="mode-btn" data-mode="ranked" data-game="rps">🏆 Ranked PvP</button>
+          </div>
+        </div>
+        <div class="stake-section">
+          <h3>Select Stake</h3>
+          <div class="stake-grid">
+            <button class="stake-btn" data-stake="100">100</button>
+            <button class="stake-btn" data-stake="250">250</button>
+            <button class="stake-btn active" data-stake="500">500</button>
+            <button class="stake-btn" data-stake="1000">1K</button>
+            <button class="stake-btn" data-stake="2500">2.5K</button>
+            <button class="stake-btn" data-stake="5000">5K</button>
+            <button class="stake-btn" data-stake="10000">10K</button>
+          </div>
+        </div>
+        <button class="find-match" id="findMatchBtn">🎮 FIND MATCH</button>
+      </section>
+      <nav class="bottom-nav">
+        <div class="nav-item" data-target="home">🏠<br>Home</div>
+        <div class="nav-item active" data-target="play">🎮<br>Play</div>
+        <div class="nav-item" data-target="leaderboard">🏆<br>Rank</div>
+        <div class="nav-item" data-target="wallet">💰<br>Wallet</div>
+        <div class="nav-item" data-target="profile">👤<br>Profile</div>
+      </nav>
+    </div>
 
-    <nav class="bottom-nav">
+    <div id="battle" class="screen">
+      <header class="screen-header">
+        <button class="back-btn" data-target="play">← Back</button>
+        <h2>⚔️ Battle</h2>
+      </header>
+      <section class="battle-content">
+        <div class="battle-arena">
+          <div class="fighter player">
+            <div class="fighter-avatar" id="playerAvatar">👤</div>
+            <div class="fighter-name" id="playerName">You</div>
+            <div class="fighter-choice" id="playerChoice"></div>
+          </div>
+          <div class="vs-badge">VS</div>
+          <div class="fighter opponent">
+            <div class="fighter-avatar" id="opponentAvatar">🤖</div>
+            <div class="fighter-name" id="opponentName">AI Opponent</div>
+            <div class="fighter-choice" id="opponentChoice"></div>
+          </div>
+        </div>
+        <div class="countdown" id="countdown">3</div>
+        <div class="battle-controls" id="battleControls">
+          <button class="battle-choice" data-choice="rock">✊</button>
+          <button class="battle-choice" data-choice="paper">✋</button>
+          <button class="battle-choice" data-choice="scissors">✌️</button>
+        </div>
+        <div class="battle-timer" id="battleTimer">10</div>
+      </section>
+    </div>
 
-        <div>🏠<br>Home</div>
+    <div id="results" class="screen">
+      <header class="screen-header">
+        <button class="back-btn" data-target="play">← Back</button>
+        <h2>Battle Result</h2>
+      </header>
+      <section class="results-content">
+        <div class="result-badge" id="resultBadge">🏆</div>
+        <h1 id="resultTitle">VICTORY</h1>
+        <p id="resultMessage">You crushed the opponent!</p>
+        <div class="rewards-grid">
+          <div class="reward-item">
+            <span class="reward-label">SkillScore</span>
+            <span class="reward-value" id="rewardSkillScore">+10</span>
+          </div>
+          <div class="reward-item">
+            <span class="reward-label">MIM</span>
+            <span class="reward-value" id="rewardMim">+10</span>
+          </div>
+          <div class="reward-item">
+            <span class="reward-label">Streak</span>
+            <span class="reward-value" id="rewardStreak">🔥 3</span>
+          </div>
+        </div>
+        <button class="play-again" id="playAgainBtn">⚔️ PLAY AGAIN</button>
+      </section>
+    </div>
 
-        <div>🎮<br>Play</div>
+    <div id="leaderboard" class="screen">
+      <header class="screen-header">
+        <button class="back-btn" data-target="home">← Back</button>
+        <h2>🏆 Leaderboard</h2>
+      </header>
+      <section class="leaderboard-content">
+        <div class="leaderboard-tabs">
+          <button class="lb-tab active" data-type="skillscore">SkillScore</button>
+          <button class="lb-tab" data-type="mim">MIM</button>
+          <button class="lb-tab" data-type="games">Games</button>
+          <button class="lb-tab" data-type="streak">Streak</button>
+        </div>
+        <div class="leaderboard-list" id="leaderboardList">
+          <div class="loading-spinner">Loading...</div>
+        </div>
+      </section>
+      <nav class="bottom-nav">
+        <div class="nav-item" data-target="home">🏠<br>Home</div>
+        <div class="nav-item" data-target="play">🎮<br>Play</div>
+        <div class="nav-item active" data-target="leaderboard">🏆<br>Rank</div>
+        <div class="nav-item" data-target="wallet">💰<br>Wallet</div>
+        <div class="nav-item" data-target="profile">👤<br>Profile</div>
+      </nav>
+    </div>
 
-        <div>🏆<br>Rank</div>
+    <div id="wallet" class="screen">
+      <header class="screen-header">
+        <button class="back-btn" data-target="home">← Back</button>
+        <h2>💰 Wallet</h2>
+      </header>
+      <section class="wallet-content">
+        <div class="wallet-balance-card">
+          <h3>🪙 MIM Balance</h3>
+          <h1 id="walletMim">0</h1>
+          <p>Lifetime: <span id="lifetimeMim">0</span></p>
+        </div>
+        <div class="wallet-balance-card">
+          <h3>💎 vUSDT Balance</h3>
+          <h1 id="walletVusdt">0</h1>
+          <p>Season 1 Rewards</p>
+        </div>
+        <div class="transaction-history">
+          <h3>Recent Transactions</h3>
+          <div id="transactionList">
+            <div class="loading-spinner">Loading...</div>
+          </div>
+        </div>
+      </section>
+      <nav class="bottom-nav">
+        <div class="nav-item" data-target="home">🏠<br>Home</div>
+        <div class="nav-item" data-target="play">🎮<br>Play</div>
+        <div class="nav-item" data-target="leaderboard">🏆<br>Rank</div>
+        <div class="nav-item active" data-target="wallet">💰<br>Wallet</div>
+        <div class="nav-item" data-target="profile">👤<br>Profile</div>
+      </nav>
+    </div>
 
-        <div>💰<br>Wallet</div>
+    <div id="profile" class="screen">
+      <header class="screen-header">
+        <button class="back-btn" data-target="home">← Back</button>
+        <h2>👤 Warrior Profile</h2>
+      </header>
+      <section class="profile-content">
+        <div class="profile-card">
+          <div class="profile-avatar" id="profileAvatar">👤</div>
+          <h2 id="profileName">Warrior</h2>
+          <p id="profileId">ID: #0000</p>
+          <div class="profile-stats">
+            <div class="profile-stat">
+              <span class="profile-stat-value" id="profileLevel">1</span>
+              <span class="profile-stat-label">Level</span>
+            </div>
+            <div class="profile-stat">
+              <span class="profile-stat-value" id="profileRank">Warrior</span>
+              <span class="profile-stat-label">Rank</span>
+            </div>
+            <div class="profile-stat">
+              <span class="profile-stat-value" id="profileWinRate">0%</span>
+              <span class="profile-stat-label">Win Rate</span>
+            </div>
+          </div>
+        </div>
+        <div class="profile-details">
+          <div class="detail-row">
+            <span>Total Wins</span>
+            <span id="profileWins">0</span>
+          </div>
+          <div class="detail-row">
+            <span>Total Losses</span>
+            <span id="profileLosses">0</span>
+          </div>
+          <div class="detail-row">
+            <span>Total Draws</span>
+            <span id="profileDraws">0</span>
+          </div>
+          <div class="detail-row">
+            <span>Games Played</span>
+            <span id="profileGames">0</span>
+          </div>
+          <div class="detail-row">
+            <span>Current Streak</span>
+            <span id="profileStreak">0</span>
+          </div>
+          <div class="detail-row">
+            <span>Join Date</span>
+            <span id="profileJoinDate">-</span>
+          </div>
+        </div>
+      </section>
+      <nav class="bottom-nav">
+        <div class="nav-item" data-target="home">🏠<br>Home</div>
+        <div class="nav-item" data-target="play">🎮<br>Play</div>
+        <div class="nav-item" data-target="leaderboard">🏆<br>Rank</div>
+        <div class="nav-item" data-target="wallet">💰<br>Wallet</div>
+        <div class="nav-item active" data-target="profile">👤<br>Profile</div>
+      </nav>
+    </div>
 
-        <div>👤<br>Profile</div>
+    <div id="loading" class="screen">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p id="loadingText">Loading...</p>
+      </div>
+    </div>
+  </div>
 
-    </nav>
-
-</div>
-
+  <script src="script.js"></script>
 </body>
-
 </html>
