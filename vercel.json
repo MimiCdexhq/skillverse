@@ -1,6 +1,5 @@
 {
   "version": 2,
   "framework": null,
-  "outputDirectory": "frontend/webapp",
-  "buildCommand": "npm run build"
+  "outputDirectory": "frontend/webapp"
 }
