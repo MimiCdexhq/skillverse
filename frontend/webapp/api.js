@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:3000';
+const API_BASE = (window.SKILLVERSE_API_BASE || '').replace(/\/$/, '') || '/api';
 
 async function api(path, options = {}) {
   const token = localStorage.getItem('skillverse_token');

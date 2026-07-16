@@ -2,7 +2,7 @@
    SKILLVERSE V1
 =========================== */
 
-const API_BASE = 'http://localhost:3000';
+const API_BASE = (window.SKILLVERSE_API_BASE || '').replace(/\/$/, '') || '/api';
 let accessToken = localStorage.getItem('skillverse_token');
 let currentWarrior = null;
 
