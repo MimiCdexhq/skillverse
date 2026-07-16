@@ -1,8 +1,0 @@
-{
-  "name": "skillverse-frontend",
-  "version": "1.0.0",
-  "description": "SkillVerse Telegram Mini App Frontend",
-  "scripts": {
-    "start": "echo 'Open index.html in browser or deploy to static host'"
-  }
-}
