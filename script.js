@@ -2,7 +2,7 @@
    SKILLVERSE V2 - FUTURISTIC UI
    =========================== */
 
-const API_BASE = '/api';
+const API_BASE = (typeof window !== 'undefined' && window.SKILLVERSE_API_URL) || '/api';
 let currentWarrior = null;
 let authToken = null;
 let currentMatch = null;

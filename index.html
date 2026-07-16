@@ -5,7 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SkillVerse - Play • Compete • Earn</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Set this to your backend API URL, e.g. https://skillverse-api.onrender.com -->
+  <meta name="skillverse-api-url" content="">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    (function() {
+      var apiUrl = document.querySelector('meta[name="skillverse-api-url"]') && document.querySelector('meta[name="skillverse-api-url"]').getAttribute('content');
+      if (apiUrl) {
+        window.SKILLVERSE_API_URL = apiUrl.replace(/\/$/, '');
+      }
+    })();
+  </script>
 </head>
 <body>
   <canvas id="particleCanvas"></canvas>
